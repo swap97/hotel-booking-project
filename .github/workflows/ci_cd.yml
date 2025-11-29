@@ -59,3 +59,10 @@ jobs:
         
         # Push to AWS
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: AKIAQHU4OBOAZE33Z3PS
+        aws-secret-access-key: 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
+        aws-region: eu-north-1  
