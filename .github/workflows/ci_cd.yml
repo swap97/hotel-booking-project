@@ -26,7 +26,7 @@ jobs:
 
     # 1. Run Logic Tests
     - name: Run Pipeline Tests
-      run: pytest tests/test_pipeline.py
+      run: python -m pytest tests/test_pipeline.py
 
     # 2. Train Model (Required for API test)
     # Note: Ensure data exists or is mocked. 
@@ -38,7 +38,7 @@ jobs:
 
     # 3. Run API Tests
     - name: Run API Tests
-      run: pytest tests/test_api.py
+      run: python -m pytest tests/test_api.py
 
     # 4. Build Docker Image (Verification)
     - name: Build Docker Image
