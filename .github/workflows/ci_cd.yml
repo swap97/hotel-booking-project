@@ -1,0 +1,45 @@
+name: FastAPI ML Pipeline CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.9"
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # 1. Run Logic Tests
+    - name: Run Pipeline Tests
+      run: pytest tests/test_pipeline.py
+
+    # 2. Train Model (Required for API test)
+    # Note: Ensure data exists or is mocked. 
+    # For CI demo, we might skip this if data isn't in repo, 
+    # but assuming you commit the CSV or fetch it:
+    - name: Train Model
+      run: python main.py
+      continue-on-error: true # Don't fail if CSV is missing in repo
+
+    # 3. Run API Tests
+    - name: Run API Tests
+      run: pytest tests/test_api.py
+
+    # 4. Build Docker Image (Verification)
+    - name: Build Docker Image
+      run: docker build . -t hotel-booking-api:latest
